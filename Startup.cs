@@ -43,6 +43,7 @@ namespace image_proxy {
                     using (content) {
                         await content.CopyToAsync (context.Response.Body);
                     }
+                    context.Response.Headers.Add("Cache-Control", "max-age=31536000");
                 }
             });
         }
