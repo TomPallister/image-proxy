@@ -36,6 +36,9 @@ namespace image_proxy {
             app.UseCors("MyPolicy");
             app.UseDeveloperExceptionPage ();
             app.Run (async context => {
+                context.Response.Headers.Add("Cache-Control", "max-age=31536000");
+                context.Response.Headers.Add("Content-Type", "image/jpg");
+
                 var url = context.Request.Query.First (x => x.Key == "url");
                 using (var httpClient = new HttpClient ()) {
                     var response = await httpClient.GetAsync (url.Value);
@@ -43,7 +46,7 @@ namespace image_proxy {
                     using (content) {
                         await content.CopyToAsync (context.Response.Body);
                     }
-                    context.Response.Headers.Add("Cache-Control", "max-age=31536000");
+                   
                 }
             });
         }
